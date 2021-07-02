@@ -1,25 +1,20 @@
-import logo from './logo.svg';
+import React, { createContext, useReducer } from 'react';
+import Toolbar from './Toolbar';
+import { PaintArea } from './PaintArea';
 import './App.css';
+export const  ToolContext = createContext(null);
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+  const [tool, dispatch] = useReducer((state, newTool) => newTool, null);
+
+    return (
+      <div className="paint-wrapper">
+        <ToolContext.Provider value={ tool }>
+          <Toolbar dispatch={dispatch}></Toolbar>
+          <PaintArea></PaintArea>
+        </ToolContext.Provider>
+      </div>
+    );
 }
 
 export default App;
