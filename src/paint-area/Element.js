@@ -1,6 +1,7 @@
-import { ToolContext } from '../App';
-import React, { useContext, useState } from 'react';
+import { useMousePositionEnd, useMousePositionStart } from '../context/MouseContext';
+import React, { useState } from 'react';
 import { Rect, Circle, Ellipse, Line, Text } from 'react-konva';
+import { useTool } from '../context/ToolContext';
 
 const selectTool = {
     'Rect': Rect,
@@ -11,42 +12,27 @@ const selectTool = {
 }
 
 export default function Element(props) {
-    const tool = useContext(ToolContext)
 
-    const [posStart, setStart] = useState({x: 0, y: 0});
-    const [posEnd, setEnd] = useState({x: 0, y: 0});
     const [print, setPrint] = useState(false);
     
-    const start = ({ evt }) => {
-        setPrint(true);
-        setEnd({
-            x: evt.clientX,
-            y: evt.clientY
-        });
-        setStart({
-            x: evt.clientX,
-            y: evt.clientY
-        });
-    }
-  
-    const dragEnd = ({ evt }) => {
-    setPrint(false);
-    }
-      
-    const dragging = ({ evt }) => {
-        if (print) {
-            setEnd({
-            x: evt.clientX,
-            y: evt.clientY
-            });
-        }
-    }
-
     const renderElement = () => {
-        
+        const Component = selectTool[props.type];
+        return <Component {...props}  
+            x={mouseStartPos.clientX} 
+            y={mouseEndPos.clientY} 
+            height={mouseEndPos.clientY - mouseStartPos.clientY} 
+            width={mouseEndPos.clientX - mouseStartPos.clientY}
+         />;
     };
 
+    const mouseStartPos = useMousePositionStart();
+    const mouseEndPos = useMousePositionEnd();
+
+    if (!props) return null;
+
     return (
-        renderElement()
+        <>
+            { renderElement() }
+        </>
     );
 }

@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
-import { Layer, Stage } from 'react-konva';
+import MouseProvider, { useMousePositionEnd, useMousePositionStart } from '../context/MouseContext';
+import React from 'react';
+import { Layer, Stage, Rect, Circle, Ellipse, Line, Text } from 'react-konva';
 import Element from './Element';
-import { ToolContext } from '../App';
 
 export default function ElementComposite({ components }) {    
     // useEffect(() => {
@@ -24,16 +24,19 @@ export default function ElementComposite({ components }) {
     //         });
     //     }
     // }, [tool]);
+
+  
     
     return (
         <Stage width={window.innerWidth} height={window.innerHeight}>
         <Layer>
         {
-            components.map(function(object, i) {
-                const Component = selectTool[object.type];
-                return <Element {...object.props} key={i} ></Element>;
-            }, this)
-          }
+            components.map((object, i) => (
+              <MouseProvider key={i}>
+                 <Element {...object} key={JSON.stringify(object)} />
+            </MouseProvider>
+            ))
+        }
         </Layer>
       </Stage>
     );

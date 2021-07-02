@@ -1,40 +1,41 @@
-import React, { useState } from 'react';
+import { useMouseDragStart, useMousePositionEnd, useMousePositionStart } from '../context/MouseContext';
+import React, { useEffect, useState } from 'react';
 import { Layer, Stage, Rect, Circle, Ellipse, Line, Text } from 'react-konva';
+import { useTool } from '../context/ToolContext';
 import ElementComposite from './ElementComposite';
-import { ToolContext } from '../App';
+import './PaintArea.css'
 
-export const PaintArea = () => {
-    const [mousePosition, setMousePosition] = useState({
-        x: null,
-        y: null
-    });
+export default function PaintArea() {
+    const tool = useTool();
+    const [components, setComponents] = useState([]);
+    // const mouseStartPos = useMousePositionStart();
+    // const mouseEndPos = useMousePositionEnd();
 
-    const mouseMove = (evt) => {
-        setMousePosition({
-        x: evt.clientX,
-        y: evt.clientY
+    useEffect(() => {
+        tool && setComponents(state => {
+            return  [
+                ...state,
+                {
+                    type: tool,
+                    // x: mouseStartPos.clientX,
+                    // y: mouseStartPos.clientY,
+                    // height: 100,
+                    // width: 100,
+                    fill: "red"
+                }
+            ];
         });
-    }
+    }, [tool])
+
+    // const mousePosition = useMousePositionStart();
+    // const mouseDragStart = useMouseDragStart();
     
     return (
-        <div className="paint-container" onMouseMove={mouseMove}>
-        <span>x: {mousePosition.x}</span>
-        <span>y: {mousePosition.y}</span>
-        <div>state: 
-            <ToolContext.Consumer>
-                {tool => tool}
-            </ToolContext.Consumer>
-        </div>
-        <ElementComposite components={[
-            <Rect 
-                x={50}
-                y={200}
-                width={200}
-                height={100}
-                fill="red"
-                shadowBlur={10}>
-            </Rect>
-        ]}></ElementComposite>
+        <div className="paint-container">
+            {/* <span>x: {mousePosition && mousePosition.clientX}</span>
+            <span>y: {mousePosition && mousePosition.clientY}</span> */}
+            <div>state: {tool}</div>
+            <ElementComposite components={components}></ElementComposite>
       </div>
     );
 }

@@ -1,19 +1,22 @@
-import React, { createContext, useReducer } from 'react';
+// @ts-nocheck
+import React from 'react';
 import Toolbar from './paint-area/Toolbar';
-import { PaintArea } from './paint-area/PaintArea';
+import PaintArea from './paint-area/PaintArea';
+import ToolProvider from './context/ToolContext';
+import  MouseProvider from './context/MouseContext';
 import './App.css';
-export const  ToolContext = createContext(null);
 
 const App = () => {
-  const [tool, dispatch] = useReducer((state, newTool) => newTool, null);
-
     return (
-      <div className="paint-wrapper">
-        <ToolContext.Provider value={ tool }>
-          <Toolbar dispatch={dispatch}></Toolbar>
-          <PaintArea></PaintArea>
-        </ToolContext.Provider>
-      </div>
+        <ToolProvider>
+         
+              <div className="paint-wrapper">
+                <Toolbar></Toolbar>
+                <PaintArea></PaintArea>
+              </div>
+        
+        </ToolProvider>
+
     );
 }
 
