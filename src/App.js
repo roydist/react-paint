@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react';
-import Toolbar from './Toolbar';
-import { PaintArea } from './PaintArea';
+import Toolbar from './paint-area/Toolbar';
+import { PaintArea } from './paint-area/PaintArea';
 import './App.css';
 export const  ToolContext = createContext(null);
 
