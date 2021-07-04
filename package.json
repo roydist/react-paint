@@ -8,6 +8,7 @@
         "@testing-library/user-event": "^12.1.10",
         "classnames": "^2.3.1",
         "konva": "^8.1.1",
+        "nanoid": "^3.1.23",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-konva": "^17.0.2-4",
@@ -18,7 +19,9 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "pre-commit": "lint-staged",
+        "lint": "eslint ."
     },
     "eslintConfig": {
         "extends": [
@@ -39,10 +42,16 @@
         ]
     },
     "devDependencies": {
+        "eslint": "^7.30.0",
+        "eslint-plugin-prettier": "^3.4.0",
+        "eslint-plugin-react": "^7.24.0",
         "husky": "^7.0.0",
         "lint-staged": "^11.0.0"
     },
     "lint-staged": {
-        "**/*": "prettier --write --ignore-unknown"
+        "**/*": "prettier --write --ignore-unknown",
+        "*.+(js|jsx)": [
+            "eslint --fix"
+        ]
     }
 }
