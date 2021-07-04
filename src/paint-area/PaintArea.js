@@ -1,4 +1,4 @@
-import { useMouseDragStart, useMousePositionEnd, useMousePositionStart } from '../context/MouseContext';
+import { useMouseDragStart, useMousePositionEnd, useMousePositionStart } from '../context/CursorContext';
 import React, { useEffect, useState } from 'react';
 import { Layer, Stage, Rect, Circle, Ellipse, Line, Text } from 'react-konva';
 import { useTool } from '../context/ToolContext';

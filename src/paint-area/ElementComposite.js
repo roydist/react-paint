@@ -1,4 +1,4 @@
-import MouseProvider, { useMousePositionEnd, useMousePositionStart } from '../context/MouseContext';
+import MouseProvider, { useMousePositionEnd, useMousePositionStart } from '../context/CursorContext';
 import React from 'react';
 import { Layer, Stage, Rect, Circle, Ellipse, Line, Text } from 'react-konva';
 import Element from './Element';

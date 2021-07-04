@@ -1,4 +1,4 @@
-import { useMousePositionEnd, useMousePositionStart } from '../context/MouseContext';
+import { useMousePositionEnd, useMousePositionStart } from 'context/CursorContext';
 import React, { useState } from 'react';
 import { Rect, Circle, Ellipse, Line, Text } from 'react-konva';
 import { useTool } from '../context/ToolContext';
