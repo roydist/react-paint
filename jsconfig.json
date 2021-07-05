@@ -1,7 +1,14 @@
 {
-    "compilerOptions": {
-        "baseUrl": "./src",
-        "checkJs": true,
-        "jsx": "react"
-    }
+  "compilerOptions": {
+    "checkJs": true,
+    "noEmit": true,
+    "jsx": "react",
+    "target": "es2016",
+    "moduleResolution": "node",
+    "lib": ["es2016", "dom"],
+    "strict": true,
+    "noImplicitAny": false,
+    "baseUrl": "src"
+  },
+  "exclude": ["node_modules", "public"]
 }
