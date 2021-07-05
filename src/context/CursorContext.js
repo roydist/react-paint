@@ -8,16 +8,6 @@ export function useGestureState() {
   return useContext(GestureContext);
 }
 
-export function useCursorPosition(ref) {
-  const [clientX, clientY] = useContext(CursorContext);
-
-  if (!ref.current) {
-    return { x: clientX, y: clientY };
-  }
-
-  return { x: clientX - ref.current.offsetLeft, y: clientY - ref.current.offsetTop };
-}
-
 export default function CursorProvider({ children }) {
   const [position, setPosition] = useState({ clientX: 0, clientY: 0 });
   const [gestureState, setGestureState] = useReducer(
