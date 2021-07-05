@@ -1,10 +1,5 @@
-import {
-  useMousePositionEnd,
-  useMousePositionStart,
-} from "context/CursorContext";
-import React, { useState } from "react";
-import { Rect, Circle, Ellipse, Line, Text } from "react-konva";
-import { useTool } from "../context/ToolContext";
+import React from 'react';
+import { Rect, Circle, Ellipse, Line, Text } from 'react-konva';
 
 const selectTool = {
   Rect: Rect,
@@ -15,25 +10,10 @@ const selectTool = {
 };
 
 export default function Element(props) {
-  const [print, setPrint] = useState(false);
-
   const renderElement = () => {
     const Component = selectTool[props.type];
-    return (
-      <Component
-        {...props}
-        x={mouseStartPos.clientX}
-        y={mouseEndPos.clientY}
-        height={mouseEndPos.clientY - mouseStartPos.clientY}
-        width={mouseEndPos.clientX - mouseStartPos.clientY}
-      />
-    );
+    return <Component {...props} />;
   };
-
-  const mouseStartPos = useMousePositionStart();
-  const mouseEndPos = useMousePositionEnd();
-
-  if (!props) return null;
 
   return <>{renderElement()}</>;
 }

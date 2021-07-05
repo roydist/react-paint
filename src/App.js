@@ -1,10 +1,9 @@
-// @ts-nocheck
-import React from "react";
-import Toolbar from "paint-area/Toolbar";
-import PaintArea from "paint-area/PaintArea";
-import ToolProvider from "context/ToolContext";
-import CursorProvider from "context/CursorContext";
-import "./App.css";
+import React from 'react';
+import Toolbar from 'paint-area/Toolbar';
+import ToolProvider from './context/ToolsContext';
+import CursorProvider from './context/CursorContext';
+import './App.css';
+import Canvas from 'paint-area/Canvas';
 
 const App = () => {
   return (
@@ -12,7 +11,7 @@ const App = () => {
       <CursorProvider>
         <div className="paint-wrapper">
           <Toolbar></Toolbar>
-          <PaintArea></PaintArea>
+          <Canvas></Canvas>
         </div>
       </CursorProvider>
     </ToolProvider>
