@@ -1,5 +1,5 @@
-// @ts-nocheck
 import React, { useContext, useReducer } from 'react';
+import { toolsReducer, toolsInitialState } from 'reducer/tools.reducer';
 
 export const ToolsContext = React.createContext();
 
@@ -14,35 +14,8 @@ export function useCurrentTool() {
   }
 }
 
-function updateToolsMap(state, action) {
-  if (action.type === 'UPDATE_TOOL') {
-    return {
-      ...state,
-      currentToolId: action.payload.id,
-      entities: {
-        ...state.entities,
-        [action.payload.id]: {
-          ...action.payload,
-        },
-      },
-    };
-  }
-  if (action.type === 'CLEAR_CURRENT_TOOL') {
-    return {
-      ...state,
-      currentToolId: null,
-    };
-  }
-  if (action.type === 'UPDATE_COLOR') {
-    return {
-      ...state,
-      currentColor: action.payload.hex,
-    };
-  }
-}
-
 export default function ToolProvider({ children }) {
-  const [state, dispatch] = useReducer(updateToolsMap, {});
+  const [state, dispatch] = useReducer(toolsReducer, toolsInitialState);
 
   return (
     <ToolsContext.Provider value={[state, dispatch]}>
