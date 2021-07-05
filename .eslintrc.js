@@ -24,6 +24,5 @@ module.exports = {
     'no-multi-spaces': ['error'],
     'no-unused-vars': 1,
     'no-debugger': 1,
-    'no-extra-boolean-cast': 0,
   },
 };
