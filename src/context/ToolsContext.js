@@ -33,6 +33,12 @@ function updateToolsMap(state, action) {
       currentToolId: null,
     };
   }
+  if (action.type === 'UPDATE_COLOR') {
+    return {
+      ...state,
+      currentColor: action.payload.hex,
+    };
+  }
 }
 
 export default function ToolProvider({ children }) {

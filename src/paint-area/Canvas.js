@@ -32,7 +32,7 @@ export default function Canvas() {
           ...toolProps,
           x: start.x,
           y: start.y,
-          fill: 'red',
+          fill: toolsState.currentColor,
         },
       });
     } else if (strokeMode === 'done') {
