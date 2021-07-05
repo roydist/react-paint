@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { nanoid } from 'nanoid';
+import { GithubPicker } from 'react-color';
 import { useToolsState, useCurrentTool } from '../context/ToolsContext';
 import './Toolbar.css';
 
@@ -19,8 +20,31 @@ export default function Toolbar() {
     });
   };
 
+  const setColor = ({ hex, source }, e) => {
+    dispatchUpdateTools({
+      type: 'UPDATE_COLOR',
+      payload: {
+        hex,
+        source,
+      },
+    });
+  };
+
   return (
     <div className="toolbar-container">
+      <GithubPicker onChange={setColor} />
+      <div
+        className={classNames({
+          active: currentTool && currentTool.type === 'Clear',
+        })}
+        onClick={(e) => {
+          dispatchUpdateTools({
+            type: 'CLEAR_CURRENT_TOOL',
+          });
+        }}
+      >
+        Clear
+      </div>
       <div
         className={classNames({
           active: currentTool && currentTool.type === 'Arrow',

@@ -1,51 +1,49 @@
 import React, { useEffect, useRef } from 'react';
-import Element from './Element';
-import { useCurrentTool, useToolsState } from '../context/ToolsContext';
-import {
-  useBoundingTargetState,
-  useCursorPosition,
-  useMouseDragBounding,
-} from 'context/CursorContext';
 import { Layer, Stage } from 'react-konva';
+import { useCurrentTool, useToolsState } from '../context/ToolsContext';
+import { useGestureState } from 'context/CursorContext';
+import { toolPropsFactory } from 'util/tool-props';
+import Element from './Element';
 
 export default function Canvas() {
   const ref = useRef();
-  const [toolsState, setToolsState] = useToolsState();
   const currentTool = useCurrentTool();
-  const [boundingTargetState, setBoundingTargetState] = useBoundingTargetState();
+  const [toolsState, setToolsState] = useToolsState();
+  const [gestureState, setGestureState] = useGestureState();
 
-  const { start, end } = useMouseDragBounding(ref);
-  const { x, y } = useCursorPosition(ref);
-
-  useEffect(() => setBoundingTargetState(ref), []);
+  const { strokeMode, start, end } = gestureState;
+  useEffect(() => {
+    setGestureState({
+      type: 'SET_REF',
+      payload: ref,
+    });
+  }, []);
 
   useEffect(() => {
-    !!currentTool &&
-      !!end.x &&
-      !!end.y &&
+    if (!currentTool) {
+      return;
+    }
+    if (strokeMode === 'stroke') {
+      const toolProps = toolPropsFactory(currentTool)(start, end);
       setToolsState({
         type: 'UPDATE_TOOL',
         payload: {
           ...currentTool,
+          ...toolProps,
           x: start.x,
           y: start.y,
-          height: end.y - start.y,
-          width: end.x - start.x,
           fill: 'red',
         },
       });
-  }, [start.x, start.y, end.x, end.y]);
-
-  const dragEnd = (e, draggedTool) => {
-    setToolsState({
-      type: 'UPDATE_TOOL',
-      payload: {
-        ...draggedTool,
-        x: e.target.x(),
-        y: e.target.y(),
-      },
-    });
-  };
+    } else if (strokeMode === 'done') {
+      setToolsState({
+        type: 'CLEAR_CURRENT_TOOL',
+      });
+      setGestureState({
+        type: 'CLEAR_STROKE',
+      });
+    }
+  }, [strokeMode, end.x, end.y]);
 
   return (
     <div className="paint-container" ref={ref}>
@@ -59,17 +57,31 @@ export default function Canvas() {
                   key={JSON.stringify(object)}
                   draggable
                   onDragEnd={(e) => {
-                    dragEnd(e, object);
+                    (e, draggedTool) => {
+                      setToolsState({
+                        type: 'UPDATE_TOOL',
+                        payload: {
+                          ...draggedTool,
+                          x: e.target.x(),
+                          y: e.target.y(),
+                        },
+                      });
+                    };
+                  }}
+                  onClick={() => {
+                    return setToolsState({
+                      type: 'UPDATE_TOOL',
+                      payload: {
+                        ...object,
+                      },
+                    });
                   }}
                 />
               );
             })}
         </Layer>
       </Stage>
-      <div>{JSON.stringify({ start, end })}</div>
-      <div>{JSON.stringify({ x, y })}</div>
+      <div>{currentTool && currentTool.id}</div>
     </div>
   );
 }
-
-// onMouseDown={start} onMouseMove={dragging} onMouseUp={dragEnd}

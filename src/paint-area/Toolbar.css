@@ -1,11 +1,10 @@
 .toolbar-container {
-  border-right: 1px solid black;
-  display: flex;
-  flex-flow: column;
-  justify-content: space-evenly;
-  width: 50px;
+    border-right: 1px solid black;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-evenly;
 }
 
 .active {
-  background-color: darksalmon;
+    background-color: darksalmon;
 }

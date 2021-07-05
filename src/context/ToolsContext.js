@@ -12,14 +12,13 @@ export function useCurrentTool() {
   if (!!toolsState && !!toolsState.entities) {
     return toolsState.entities[toolsState.currentToolId];
   }
-  return null;
 }
 
 function updateToolsMap(state, action) {
   if (action.type === 'UPDATE_TOOL') {
     return {
       ...state,
-      currentToolId: !!action.payload.height ? null : action.payload.id,
+      currentToolId: action.payload.id,
       entities: {
         ...state.entities,
         [action.payload.id]: {
@@ -37,10 +36,10 @@ function updateToolsMap(state, action) {
 }
 
 export default function ToolProvider({ children }) {
-  const [toolsState, dispatchSetToolsState] = useReducer(updateToolsMap, {});
+  const [state, dispatch] = useReducer(updateToolsMap, {});
 
   return (
-    <ToolsContext.Provider value={[toolsState, dispatchSetToolsState]}>
+    <ToolsContext.Provider value={[state, dispatch]}>
       {children}
     </ToolsContext.Provider>
   );

@@ -1,68 +1,11 @@
 import React, { useState, useContext, useEffect, useReducer } from 'react';
+import { gestureReduce, gestureInitialState } from '../reducer/gesture.reducer';
 
 const CursorContext = React.createContext();
-const BoundingTargetContext = React.createContext();
 const GestureContext = React.createContext();
 
-const initialState = {
-  start: {
-    x: null,
-    y: null,
-  },
-  end: {
-    x: null,
-    y: null,
-  },
-};
-function reduce(state, action) {
-  switch (action.type) {
-    case 'MOUSE_DOWN':
-      return {
-        ...state,
-        start: {
-          x: action.payload.clientX,
-          y: action.payload.clientY,
-        },
-        end: {
-          x: null,
-          y: null,
-        },
-      };
-    case 'MOUSE_UP':
-      return {
-        ...state,
-        end: {
-          x: action.payload.clientX,
-          y: action.payload.clientY,
-        },
-      };
-    default:
-      throw new Error(`Unhandled type: ${action.type}`);
-  }
-}
-
-export function useMouseDragStart() {
+export function useGestureState() {
   return useContext(GestureContext);
-}
-
-export function useMouseDragBounding(ref) {
-  const [gestureState, setGestureState] = useContext(GestureContext);
-
-  const { start, end } = gestureState;
-  if (!ref.current) {
-    return { start, end };
-  }
-
-  return {
-    start: {
-      x: start.x - ref.current.offsetLeft,
-      y: start.y - ref.current.offsetTop,
-    },
-    end: {
-      x: end.x - ref.current.offsetLeft,
-      y: end.y - ref.current.offsetTop,
-    },
-  };
 }
 
 export function useCursorPosition(ref) {
@@ -75,14 +18,12 @@ export function useCursorPosition(ref) {
   return { x: clientX - ref.current.offsetLeft, y: clientY - ref.current.offsetTop };
 }
 
-export function useBoundingTargetState() {
-  return useContext(BoundingTargetContext);
-}
-
 export default function CursorProvider({ children }) {
   const [position, setPosition] = useState({ clientX: 0, clientY: 0 });
-  const [boundingTargetState, setBoundingTargetState] = useState();
-  const [gestureState, setGestureState] = useReducer(reduce, initialState);
+  const [gestureState, setGestureState] = useReducer(
+    gestureReduce,
+    gestureInitialState
+  );
 
   const mouseDown = ({ clientX, clientY }) => {
     setGestureState({
@@ -98,42 +39,37 @@ export default function CursorProvider({ children }) {
     });
   };
 
-  const update = (event) => {
-    const { target, clientX, clientY } = event;
+  const mouseMove = ({ clientX, clientY }) => {
     setPosition({
       clientX,
       clientY,
     });
+    setGestureState({
+      type: 'MOUSE_MOVE',
+      payload: { clientX, clientY },
+    });
   };
 
   useEffect(() => {
-    if (!!boundingTargetState) {
-      boundingTargetState.current.addEventListener('mousemove', update, false);
-      boundingTargetState.current.addEventListener('mousedown', mouseDown, false);
-      boundingTargetState.current.addEventListener('mouseup', mouseUp, false);
+    if (!!gestureState.ref && !!gestureState.ref.current) {
+      gestureState.ref.current.addEventListener('mousemove', mouseMove, false);
+      gestureState.ref.current.addEventListener('mousedown', mouseDown, false);
+      gestureState.ref.current.addEventListener('mouseup', mouseUp, false);
     }
     return () => {
-      if (!!boundingTargetState) {
-        boundingTargetState.current.removeEventListener('mousemove', update);
-        boundingTargetState.current.removeEventListener('mousedown', mouseDown);
-        boundingTargetState.current.removeEventListener('mouseup', mouseUp);
+      if (!!gestureState.ref && !!gestureState.ref.current) {
+        gestureState.ref.current.removeEventListener('mousemove', mouseMove);
+        gestureState.ref.current.removeEventListener('mousedown', mouseDown);
+        gestureState.ref.current.removeEventListener('mouseup', mouseUp);
       }
     };
-  }, [boundingTargetState]);
+  }, [gestureState.ref]);
 
   return (
     <CursorContext.Provider value={[position.clientX, position.clientY]}>
-      <BoundingTargetContext.Provider
-        value={[boundingTargetState, setBoundingTargetState]}
-      >
-        <GestureContext.Provider value={[gestureState, setGestureState]}>
-          <BoundingTargetContext.Provider
-            value={[boundingTargetState, setBoundingTargetState]}
-          >
-            {children}
-          </BoundingTargetContext.Provider>
-        </GestureContext.Provider>
-      </BoundingTargetContext.Provider>
+      <GestureContext.Provider value={[gestureState, setGestureState]}>
+        {children}
+      </GestureContext.Provider>
     </CursorContext.Provider>
   );
 }
