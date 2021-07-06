@@ -7,7 +7,7 @@ export function useToolsState() {
   return useContext(ToolsContext);
 }
 
-export function useCurrentTool() {
+export function getCurrentTool() {
   const [toolsState] = useContext(ToolsContext);
   if (!!toolsState && !!toolsState.entities) {
     return toolsState.entities[toolsState.currentToolId];

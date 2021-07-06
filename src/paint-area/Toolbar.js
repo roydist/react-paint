@@ -2,12 +2,12 @@ import React from 'react';
 import classNames from 'classnames';
 import { nanoid } from 'nanoid';
 import { GithubPicker } from 'react-color';
-import { useToolsState, useCurrentTool } from '../context/ToolsContext';
+import { useToolsState, getCurrentTool } from '../context/ToolsContext';
 import './Toolbar.css';
 
 export default function Toolbar() {
   const [_, dispatchUpdateTools] = useToolsState();
-  const currentTool = useCurrentTool();
+  const currentTool = getCurrentTool();
 
   const setTool = (type) => {
     const id = nanoid();

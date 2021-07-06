@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { Layer, Stage } from 'react-konva';
-import { useCurrentTool, useToolsState } from '../context/ToolsContext';
+import { getCurrentTool, useToolsState } from '../context/ToolsContext';
 import { useGestureState } from 'context/CursorContext';
 import { toolPropsFactory } from 'util/tool-props';
 import Element from './Element';
 
 export default function Canvas() {
   const ref = useRef();
-  const currentTool = useCurrentTool();
+  const currentTool = getCurrentTool();
   const [toolsState, setToolsState] = useToolsState();
   const [gestureState, setGestureState] = useGestureState();
 
