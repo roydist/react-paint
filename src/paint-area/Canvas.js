@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
 import { getCurrentTool, useToolsState } from '../context/ToolsContext';
 import { useGestureState } from 'context/CursorContext';
@@ -10,6 +10,7 @@ export default function Canvas() {
   const currentTool = getCurrentTool();
   const [toolsState, setToolsState] = useToolsState();
   const [gestureState, setGestureState] = useGestureState();
+  const [isDraggable, setDraggable] = useState(false);
 
   const { strokeMode, start, end } = gestureState;
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function Canvas() {
 
   useEffect(() => {
     if (!!currentTool && strokeMode === 'stroke') {
+      setDraggable(false);
       const toolProps = toolPropsFactory(currentTool)(start, end);
       setToolsState({
         type: 'UPDATE_TOOL',
@@ -33,9 +35,7 @@ export default function Canvas() {
         },
       });
     } else if (strokeMode === 'done') {
-      setGestureState({
-        type: 'CLEAR_STROKE',
-      });
+      setDraggable(true);
       setToolsState({
         type: 'CLEAR_CURRENT_TOOL',
       });
@@ -43,18 +43,33 @@ export default function Canvas() {
   }, [strokeMode, end.x, end.y]);
 
   const drag = (e, tool) => {
-    e.evt.stopPropagation();
-    setToolsState({
-      type: 'UPDATE_TOOL',
-      payload: {
-        ...tool,
-        x: e.target.x(),
-        y: e.target.y(),
-      },
-    });
-    setToolsState({
-      type: 'CLEAR_CURRENT_TOOL',
-    });
+    if (!currentTool) {
+      console.log(e);
+      e.evt.stopPropagation();
+      setToolsState({
+        type: 'UPDATE_TOOL',
+        payload: {
+          ...tool,
+          x: e.target.x(),
+          y: e.target.y(),
+        },
+      });
+      setToolsState({
+        type: 'CLEAR_CURRENT_TOOL',
+      });
+    }
+  };
+
+  const click = (e, object) => {
+    if (!currentTool) {
+      console.log(e);
+
+      e.evt.stopPropagation();
+      setToolsState({
+        type: 'SELECT_EXISTING_TOOL',
+        payload: object.id,
+      });
+    }
   };
 
   return (
@@ -68,14 +83,9 @@ export default function Canvas() {
                   {...object}
                   selected={currentTool && object.id === currentTool.id}
                   key={JSON.stringify(object)}
-                  draggable
+                  draggable={isDraggable}
                   onDragEnd={(e) => drag(e, object)}
-                  onClick={(e) => {
-                    setToolsState({
-                      type: 'SELECT_EXISTING_TOOL',
-                      payload: object.id,
-                    });
-                  }}
+                  onClick={(e) => click(e, object)}
                 />
               );
             })}
