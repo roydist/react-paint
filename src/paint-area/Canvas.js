@@ -20,10 +20,7 @@ export default function Canvas() {
   }, []);
 
   useEffect(() => {
-    if (!currentTool) {
-      return;
-    }
-    if (strokeMode === 'stroke') {
+    if (!!currentTool && strokeMode === 'stroke') {
       const toolProps = toolPropsFactory(currentTool)(start, end);
       setToolsState({
         type: 'UPDATE_TOOL',
@@ -36,14 +33,29 @@ export default function Canvas() {
         },
       });
     } else if (strokeMode === 'done') {
-      setToolsState({
-        type: 'CLEAR_CURRENT_TOOL',
-      });
       setGestureState({
         type: 'CLEAR_STROKE',
       });
+      setToolsState({
+        type: 'CLEAR_CURRENT_TOOL',
+      });
     }
   }, [strokeMode, end.x, end.y]);
+
+  const drag = (e, tool) => {
+    e.evt.stopPropagation();
+    setToolsState({
+      type: 'UPDATE_TOOL',
+      payload: {
+        ...tool,
+        x: e.target.x(),
+        y: e.target.y(),
+      },
+    });
+    setToolsState({
+      type: 'CLEAR_CURRENT_TOOL',
+    });
+  };
 
   return (
     <div className="paint-container" ref={ref}>
@@ -54,26 +66,14 @@ export default function Canvas() {
               return (
                 <Element
                   {...object}
+                  selected={currentTool && object.id === currentTool.id}
                   key={JSON.stringify(object)}
                   draggable
-                  onDragEnd={(e) => {
-                    (e, draggedTool) => {
-                      setToolsState({
-                        type: 'UPDATE_TOOL',
-                        payload: {
-                          ...draggedTool,
-                          x: e.target.x(),
-                          y: e.target.y(),
-                        },
-                      });
-                    };
-                  }}
-                  onClick={() => {
-                    return setToolsState({
-                      type: 'UPDATE_TOOL',
-                      payload: {
-                        ...object,
-                      },
+                  onDragEnd={(e) => drag(e, object)}
+                  onClick={(e) => {
+                    setToolsState({
+                      type: 'SELECT_EXISTING_TOOL',
+                      payload: object.id,
                     });
                   }}
                 />

@@ -17,6 +17,11 @@ export function toolsReducer(state, action) {
           },
         },
       };
+    case 'SELECT_EXISTING_TOOL':
+      return {
+        ...state,
+        currentToolId: action.payload,
+      };
     case 'CLEAR_CURRENT_TOOL':
       return {
         ...state,

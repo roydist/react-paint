@@ -12,7 +12,8 @@ const selectTool = {
 export default function Element(props) {
   const renderElement = () => {
     const Component = selectTool[props.type];
-    return <Component {...props} />;
+    const stroke = props.selected ? 'black' : '';
+    return <Component {...props} stroke={stroke} />;
   };
 
   return <>{renderElement()}</>;
