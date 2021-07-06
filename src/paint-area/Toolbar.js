@@ -4,8 +4,10 @@ import { nanoid } from 'nanoid';
 import { GithubPicker } from 'react-color';
 import { useToolsState, getCurrentTool } from '../context/ToolsContext';
 import './Toolbar.css';
+import { useGestureState } from 'context/CursorContext';
 
 export default function Toolbar() {
+  const [gestureState, dispatchGestureAction] = useGestureState();
   const [_, dispatchUpdateTools] = useToolsState();
   const currentTool = getCurrentTool();
 
@@ -17,6 +19,9 @@ export default function Toolbar() {
         id,
         type,
       },
+    });
+    dispatchGestureAction({
+      type: 'CLEAR_STROKE',
     });
   };
 
