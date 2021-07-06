@@ -42,9 +42,15 @@ export default function CursorProvider({ children }) {
 
   useEffect(() => {
     if (!!gestureState.ref && !!gestureState.ref.current) {
-      gestureState.ref.current.addEventListener('mousemove', mouseMove, false);
-      gestureState.ref.current.addEventListener('mousedown', mouseDown, false);
-      gestureState.ref.current.addEventListener('mouseup', mouseUp, false);
+      gestureState.ref.current.addEventListener('mousemove', mouseMove, {
+        capture: true,
+      });
+      gestureState.ref.current.addEventListener('mousedown', mouseDown, {
+        capture: true,
+      });
+      gestureState.ref.current.addEventListener('mouseup', mouseUp, {
+        capture: true,
+      });
     }
     return () => {
       if (!!gestureState.ref && !!gestureState.ref.current) {
