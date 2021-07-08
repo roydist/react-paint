@@ -42,36 +42,6 @@ export default function Canvas() {
     }
   }, [strokeMode, end.x, end.y]);
 
-  const drag = (e, tool) => {
-    if (!currentTool) {
-      console.log(e);
-      e.evt.stopPropagation();
-      setToolsState({
-        type: 'UPDATE_TOOL',
-        payload: {
-          ...tool,
-          x: e.target.x(),
-          y: e.target.y(),
-        },
-      });
-      setToolsState({
-        type: 'CLEAR_CURRENT_TOOL',
-      });
-    }
-  };
-
-  const click = (e, object) => {
-    if (!currentTool) {
-      console.log(e);
-
-      e.evt.stopPropagation();
-      setToolsState({
-        type: 'SELECT_EXISTING_TOOL',
-        payload: object.id,
-      });
-    }
-  };
-
   return (
     <div className="paint-container" ref={ref}>
       <Stage width={800} height={500}>
@@ -80,12 +50,12 @@ export default function Canvas() {
             Object.values(toolsState.entities).map((object) => {
               return (
                 <Element
-                  {...object}
-                  selected={currentTool && object.id === currentTool.id}
                   key={JSON.stringify(object)}
+                  {...object}
                   draggable={isDraggable}
-                  onDragEnd={(e) => drag(e, object)}
-                  onClick={(e) => click(e, object)}
+                  disabled={!!currentTool}
+                  selected={currentTool && object.id === currentTool.id}
+                  dispatch={setToolsState}
                 />
               );
             })}
