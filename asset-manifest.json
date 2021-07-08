@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/react-paint/static/css/main.fe967785.chunk.css",
+    "main.js": "/react-paint/static/js/main.04fa666f.chunk.js",
+    "main.js.map": "/react-paint/static/js/main.04fa666f.chunk.js.map",
+    "runtime-main.js": "/react-paint/static/js/runtime-main.6ac13ea3.js",
+    "runtime-main.js.map": "/react-paint/static/js/runtime-main.6ac13ea3.js.map",
+    "static/js/2.4c130ed6.chunk.js": "/react-paint/static/js/2.4c130ed6.chunk.js",
+    "static/js/2.4c130ed6.chunk.js.map": "/react-paint/static/js/2.4c130ed6.chunk.js.map",
+    "static/js/3.3e4c78d3.chunk.js": "/react-paint/static/js/3.3e4c78d3.chunk.js",
+    "static/js/3.3e4c78d3.chunk.js.map": "/react-paint/static/js/3.3e4c78d3.chunk.js.map",
+    "index.html": "/react-paint/index.html",
+    "static/css/main.fe967785.chunk.css.map": "/react-paint/static/css/main.fe967785.chunk.css.map",
+    "static/js/2.4c130ed6.chunk.js.LICENSE.txt": "/react-paint/static/js/2.4c130ed6.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6ac13ea3.js",
+    "static/js/2.4c130ed6.chunk.js",
+    "static/css/main.fe967785.chunk.css",
+    "static/js/main.04fa666f.chunk.js"
+  ]
+}
