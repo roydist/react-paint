@@ -31,8 +31,7 @@ export default function Canvas() {
         payload: {
           ...currentTool,
           ...toolProps,
-          x: start.x,
-          y: start.y,
+          stroke: toolsState.currentColor,
           fill: toolsState.currentColor,
         },
       });
