@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect, useReducer } from 'react';
+import { debounce } from 'util/debounce';
 import { gestureReduce, gestureInitialState } from '../reducer/gesture.reducer';
 
 const CursorContext = React.createContext();
@@ -16,24 +17,31 @@ export default function CursorProvider({ children }) {
   );
 
   const mouseDown = ({ clientX, clientY }) => {
-    setGestureState({
-      type: 'MOUSE_DOWN',
-      payload: { clientX, clientY },
-    });
+    debounce(
+      setGestureState({
+        type: 'MOUSE_DOWN',
+        payload: { clientX, clientY },
+      })
+    );
   };
 
   const mouseUp = ({ clientX, clientY }) => {
-    setGestureState({
-      type: 'MOUSE_UP',
-      payload: { clientX, clientY },
-    });
+    debounce(
+      setGestureState({
+        type: 'MOUSE_UP',
+        payload: { clientX, clientY },
+      })
+    );
   };
 
   const mouseMove = ({ clientX, clientY }) => {
-    setPosition({
-      clientX,
-      clientY,
-    });
+    debounce(
+      setPosition({
+        clientX,
+        clientY,
+      })
+    );
+
     setGestureState({
       type: 'MOUSE_MOVE',
       payload: { clientX, clientY },
