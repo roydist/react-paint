@@ -1,6 +1,4 @@
 .paint-wrapper {
     display: flex;
     flex-direction: row;
-    width: 1024px;
-    height: 500px;
 }

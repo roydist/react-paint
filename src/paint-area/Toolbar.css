@@ -1,8 +1,8 @@
 .toolbar-container {
-    border-right: 1px solid black;
     display: flex;
     flex-flow: column;
     justify-content: space-evenly;
+    height: 400px;
 }
 
 .active {

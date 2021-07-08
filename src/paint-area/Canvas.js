@@ -5,6 +5,7 @@ import { getCurrentTool, useToolsState } from '../context/ToolsContext';
 import { useGestureState } from 'context/CursorContext';
 import { toolPropsFactory } from 'util/tool-props';
 import Element from './Element';
+import './Canvas.css';
 
 export default function Canvas() {
   const ref = useRef();
@@ -52,8 +53,8 @@ export default function Canvas() {
   }, [strokeMode, end.x, end.y]);
 
   return (
-    <div className="paint-container" ref={ref}>
-      <Stage width={800} height={500}>
+    <div className="canvas-container" ref={ref}>
+      <Stage width={1024} height={768}>
         <Layer>
           {toolsState.entities &&
             Object.values(toolsState.entities).map((object) => {
