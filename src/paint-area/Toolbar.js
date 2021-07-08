@@ -55,9 +55,7 @@ export default function Toolbar() {
           active: currentTool && currentTool.type === 'Arrow',
         })}
         onClick={(e) => {
-          dispatchUpdateTools({
-            type: 'CLEAR_CURRENT_TOOL',
-          });
+          setTool('Arrow');
         }}
       >
         Arrow

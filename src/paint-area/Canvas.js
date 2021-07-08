@@ -23,7 +23,7 @@ export default function Canvas() {
   }, []);
 
   useEffect(() => {
-    if (!!currentTool && strokeMode === 'stroke') {
+    if (!!currentTool && currentTool.type !== 'Arrow' && strokeMode === 'stroke') {
       setDraggable(false);
       const toolProps = toolPropsFactory(currentTool)(start, end);
       setToolsState({

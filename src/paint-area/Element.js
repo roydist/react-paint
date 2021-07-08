@@ -1,4 +1,5 @@
 import React from 'react';
+import { Rect, Circle, Ellipse, Line, Text, Arrow } from 'react-konva';
 
 const selectTool = {
   Rect: Rect,
@@ -6,6 +7,7 @@ const selectTool = {
   Ellipse: Ellipse,
   Line: Line,
   Text: Text,
+  Arrow: Arrow,
 };
 
 export default function Element(props) {
