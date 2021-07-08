@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
+import { nanoid } from 'nanoid';
 import { getCurrentTool, useToolsState } from '../context/ToolsContext';
 import { useGestureState } from 'context/CursorContext';
 import { toolPropsFactory } from 'util/tool-props';
@@ -36,8 +37,16 @@ export default function Canvas() {
       });
     } else if (strokeMode === 'done') {
       setDraggable(true);
+      const id = nanoid();
       setToolsState({
-        type: 'CLEAR_CURRENT_TOOL',
+        type: 'UPDATE_TOOL',
+        payload: {
+          id,
+          type: currentTool.type,
+        },
+      });
+      setGestureState({
+        type: 'CLEAR_STROKE',
       });
     }
   }, [strokeMode, end.x, end.y]);
